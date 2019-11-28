@@ -6,13 +6,14 @@ import {
   View,
   Text,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Colors,
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-export default function HomeScreen() {
+export default function HomeScreen(props) {
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -20,19 +21,23 @@ export default function HomeScreen() {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          {global.HermesInternal == null ? null : (
+          {/* {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>
-          )}
+          )} */}
+
           <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate('Detail')}>
+              <View style={styles.sectionContainer}>
+                <Text style={styles.sectionTitle}>Step One</Text>
+                <Text style={styles.sectionDescription}>
+                  Edit <Text style={styles.highlight}>App.js</Text> to change
+                  this screen and then come back to see your edits.
+                </Text>
+              </View>
+            </TouchableOpacity>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>See Your Changes</Text>
               <Text style={styles.sectionDescription}>
@@ -96,6 +101,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   safeArea: {
-      flex: 1
-  }
+    flex: 1,
+  },
 });
