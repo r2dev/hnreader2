@@ -8,21 +8,19 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import {WebView} from 'react-native-webview';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-export default function DetailScreen(props) {
+export default function CommentScreen() {
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
-        {/* <ScrollView
+        <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <View style={styles.body}>
-              <Text>Detail</Text>
+            <Text>Comment</Text>
           </View>
-        </ScrollView> */}
-        <WebView source={{uri: props.navigation.getParam('link')}} />
+        </ScrollView>
       </SafeAreaView>
     </>
   );

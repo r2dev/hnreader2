@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  FlatList,
   View,
   Text,
   StatusBar,
@@ -10,45 +11,67 @@ import {
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 export default function HomeScreen(props) {
-  const [data, setData] = useState([
-    {
-      id: 'fhgodshfgos',
-      title: 'Rooms can be as bright as the outdoors',
-    },
-    {
-      id: '45ytjrtjtr',
-      title: 'Matrix Calculus for Deep Learning',
-    },
-    {
-      id: 'asdofhashdogfa',
-      title: 'Singapore tells Facebook to correct post under new fake news law',
-    },
-  ]);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch('https://api.hnpwa.com/v0/news/1.json')
+      .then(response => response.json())
+      .then(json => {
+        setData(json);
+      });
+  }, []);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <View style={styles.body}>
-            {data.map(item => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => props.navigation.navigate('Detail')}>
-                <View style={styles.sectionContainer}>
-                  <Text style={styles.sectionTitle}>{item.title}</Text>
-                  <Text style={styles.sectionDescription}>
-                    {/* Edit <Text style={styles.highlight}>App.js</Text> to change
-                    this screen and then come back to see your edits. */}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
+        <View style={styles.body}>
+          <FlatList
+            data={data}
+            renderItem={({item}) => (
+              <>
+                {
+                  (item.type = 'link' && (
+                    <LinkNews item={item} navigation={props.navigation} />
+                  ))
+                }
+              </>
+            )}
+            keyExtractor={item => '' + item.id}
+          />
+        </View>
       </SafeAreaView>
     </>
+  );
+}
+
+function LinkNews(props) {
+  function handleLinkPress() {
+    props.navigation.navigate('Detail', {
+      id: props.item.id,
+      link: props.item.url,
+    });
+  }
+  function handleCommentPress() {
+    props.navigation.navigate('Comment');
+  }
+  return (
+    <TouchableOpacity onPress={handleLinkPress}>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>{props.item.title}</Text>
+        <View style={styles.sectionButton}>
+          <View style={styles.sectionInfo}>
+            <Text>⬆️{props.item.points}</Text>
+            <Text>{' | ' + props.item.user}</Text>
+            {props.item.domain && <Text>{' | ' + props.item.domain}</Text>}
+          </View>
+          <TouchableOpacity onPress={handleCommentPress}>
+            <View>
+              <Text>🗣{props.item.comments_count}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -68,7 +91,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '600',
     color: Colors.black,
   },
@@ -77,6 +100,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
+  },
+  sectionButton: {
+    marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  sectionInfo: {
+    flexDirection: 'row',
   },
   highlight: {
     fontWeight: '700',

@@ -12,6 +12,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 import HomeScreen from './screens/HomeScreen';
 import DetailScreen from './screens/DetailScreen';
+import CommentScreen from './screens/CommentScreen';
 
 const AppNavigator = createStackNavigator(
   {
@@ -20,6 +21,9 @@ const AppNavigator = createStackNavigator(
     },
     Detail: {
       screen: DetailScreen,
+    },
+    Comment: {
+      screen: CommentScreen,
     },
   },
   {
