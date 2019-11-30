@@ -15,9 +15,9 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import formatDistanceToNow from 'date-fns/esm/formatDistanceToNow';
 HomeScreen.navigationOptions = {
   title: 'Home',
-  headerRight: () => (
-    <Button onPress={() => alert('This is a button!')} title="Info" />
-  ),
+  // headerRight: () => (
+  //   <Button onPress={() => alert('This is a button!')} title="Info" />
+  // ),
 };
 export default function HomeScreen(props) {
   const [page, setPage] = useState(1);
@@ -101,13 +101,22 @@ function LinkNews(props) {
     });
   }
   function handleCommentPress() {
-    props.navigation.navigate('Comment');
+    props.navigation.navigate('Comment', {
+      id: props.item.id,
+      link: props.item.url,
+      title: props.item.title,
+    });
   }
   return (
     <TouchableOpacity onPress={handleLinkPress}>
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>{props.item.title}</Text>
-        {props.item.domain && <Text>{props.item.domain}</Text>}
+        <Text style={styles.sectionTitle}>
+          {props.item.title}
+          {props.item.domain && (
+            <Text style={styles.domain}> ({props.item.domain})</Text>
+          )}
+        </Text>
+
         <View style={styles.sectionButton}>
           <View style={styles.sectionInfo}>
             <Text>⬆️{props.item.points}</Text>
@@ -179,5 +188,9 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  domain: {
+    fontSize: 16,
+    fontWeight: '400',
   },
 });

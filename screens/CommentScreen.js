@@ -9,18 +9,26 @@ import {
   StatusBar,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+CommentScreen.navigationOptions = ({navigation}) => {
+  return {
+    title: navigation.getParam('title', 'Detail'),
+  };
+};
 export default function CommentScreen() {
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView
+      <View style={styles.body}>
+        <Text>Comment</Text>
+      </View>
+        {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <View style={styles.body}>
             <Text>Comment</Text>
           </View>
-        </ScrollView>
+        </ScrollView> */}
       </SafeAreaView>
     </>
   );
