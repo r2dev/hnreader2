@@ -11,7 +11,6 @@ import {createStackNavigator} from 'react-navigation-stack';
 // import firebase from '@react-native-firebase/app';
 
 import HomeScreen from './screens/HomeScreen';
-// import DetailScreen from './screens/DetailScreen';
 import CommentScreen from './screens/CommentScreen';
 
 const AppNavigator = createStackNavigator(
@@ -19,9 +18,6 @@ const AppNavigator = createStackNavigator(
     Home: {
       screen: HomeScreen,
     },
-    // Detail: {
-    //   screen: DetailScreen,
-    // },
     Comment: {
       screen: CommentScreen,
     },

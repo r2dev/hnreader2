@@ -70,11 +70,13 @@ export default function HomeScreen(props) {
             ItemSeparatorComponent={() => <View style={styles.seperator} />}
             renderItem={({item}) => (
               <>
-                {
-                  (item.type = 'link' && (
-                    <LinkNews item={item} navigation={props.navigation} />
-                  ))
-                }
+                {(item.type === 'link' || item.type === 'job') && (
+                  <LinkNews
+                    item={item}
+                    navigation={props.navigation}
+                    type={item.type}
+                  />
+                )}
               </>
             )}
             keyExtractor={item => '' + item.id}
@@ -96,13 +98,6 @@ export default function HomeScreen(props) {
 }
 
 function LinkNews(props) {
-  function handleLinkPress() {
-    props.navigation.navigate('Detail', {
-      id: props.item.id,
-      link: props.item.url,
-      title: props.item.title,
-    });
-  }
   function handleCommentPress() {
     props.navigation.navigate('Comment', {
       id: props.item.id,
@@ -154,16 +149,25 @@ function LinkNews(props) {
           )}
         </Text>
 
-        <View style={styles.sectionButton}>
-          <View style={styles.sectionInfo}>
-            <Text>⬆️{props.item.points}</Text>
-            <Text>{' · ' + props.item.user}</Text>
-          </View>
-          <TouchableOpacity onPress={handleCommentPress}>
-            <View style={styles.commentButton}>
-              <Text>🗣{props.item.comments_count}</Text>
+        <View style={styles.sectionBottom}>
+          {(props.type === 'link') && (
+            <>
+              <View style={styles.sectionInfo}>
+                <Text>⬆️{props.item.points}</Text>
+                <Text>{' · ' + props.item.user}</Text>
+              </View>
+              <TouchableOpacity onPress={handleCommentPress}>
+                <View style={styles.commentButton}>
+                  <Text>🗣{props.item.comments_count}</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
+          {props.type === 'job' && (
+            <View style={styles.sectionInfo}>
+              <Text>💼</Text>
             </View>
-          </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -196,7 +200,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Colors.dark,
   },
-  sectionButton: {
+  sectionBottom: {
     marginTop: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
