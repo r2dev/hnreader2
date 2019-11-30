@@ -8,9 +8,11 @@ import {
   Text,
   StatusBar,
   Button,
+  Alert,
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import formatDistanceToNow from 'date-fns/esm/formatDistanceToNow';
 HomeScreen.navigationOptions = {
@@ -55,6 +57,7 @@ export default function HomeScreen(props) {
     setPage(currentPage + 1);
     getNews(currentPage + 1, false);
   }
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -107,8 +110,42 @@ function LinkNews(props) {
       title: props.item.title,
     });
   }
+  async function openLink() {
+    try {
+      const url = props.item.url;
+      if (await InAppBrowser.isAvailable()) {
+        await InAppBrowser.open(url, {
+          // iOS Properties
+          dismissButtonStyle: 'cancel',
+          readerMode: false,
+          animated: true,
+          modalPresentationStyle: 'popover',
+          modalTransitionStyle: 'coverVertical',
+          modalEnabled: true,
+          enableBarCollapsing: false,
+          // Android Properties
+          showTitle: true,
+          toolbarColor: '#6200EE',
+          secondaryToolbarColor: 'black',
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+          forceCloseOnRedirection: false,
+          // Specify full animation resource identifier(package:anim/name)
+          // or only resource name(in case of animation bundled with app).
+          animations: {
+            startEnter: 'slide_in_right',
+            startExit: 'slide_out_left',
+            endEnter: 'slide_in_left',
+            endExit: 'slide_out_right',
+          },
+        });
+      } else Linking.openURL(url);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  }
   return (
-    <TouchableOpacity onPress={handleLinkPress}>
+    <TouchableOpacity onPress={openLink}>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>
           {props.item.title}
@@ -123,7 +160,7 @@ function LinkNews(props) {
             <Text>{' · ' + props.item.user}</Text>
           </View>
           <TouchableOpacity onPress={handleCommentPress}>
-            <View>
+            <View style={styles.commentButton}>
               <Text>🗣{props.item.comments_count}</Text>
             </View>
           </TouchableOpacity>
@@ -192,5 +229,20 @@ const styles = StyleSheet.create({
   domain: {
     fontSize: 16,
     fontWeight: '400',
+  },
+  commentButton: {
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+    backgroundColor: '#fff',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
 });
