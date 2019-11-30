@@ -10,6 +10,12 @@ import {
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+DetailScreen.navigationOptions = ({navigation}) => {
+  return {
+    title: navigation.getParam('title', 'Detail'),
+    
+  };
+};
 export default function DetailScreen(props) {
   return (
     <>
