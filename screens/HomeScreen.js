@@ -77,6 +77,9 @@ export default function HomeScreen(props) {
                     type={item.type}
                   />
                 )}
+                {item.type === 'ask' && (
+                  <AskNews item={item} navigation={props.navigation} />
+                )}
               </>
             )}
             keyExtractor={item => '' + item.id}
@@ -150,7 +153,7 @@ function LinkNews(props) {
         </Text>
 
         <View style={styles.sectionBottom}>
-          {(props.type === 'link') && (
+          {props.type === 'link' && (
             <>
               <View style={styles.sectionInfo}>
                 <Text>⬆️{props.item.points}</Text>
@@ -168,6 +171,28 @@ function LinkNews(props) {
               <Text>💼</Text>
             </View>
           )}
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+function AskNews(props) {
+  function handleCommentPress() {
+    props.navigation.navigate('Comment', {
+      id: props.item.id,
+      link: props.item.url,
+      title: props.item.title,
+    });
+  }
+  return (
+    <TouchableOpacity onPress={handleCommentPress}>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>{props.item.title}</Text>
+        <View>
+          <View style={styles.sectionInfo}>
+            <Text>🤔</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
