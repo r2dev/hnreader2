@@ -14,7 +14,7 @@
     "@react-native-firebase/database": "^6.1.0",
     "date-fns": "^2.8.1",
     "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react-native": "0.62.3",
     "react-native-gesture-handler": "^1.5.1",
     "react-native-htmlview": "^0.15.0",
     "react-native-inappbrowser-reborn": "^3.3.3",
